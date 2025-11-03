@@ -1,4 +1,4 @@
-resource "aws_instance" "bastion" {
+resource "aws_instance" "backend_alb_bastion" {
     ami = local.ami_id
     instance_type = "t3.micro"
     vpc_security_group_ids = [local.bastion_sg_id]
