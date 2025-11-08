@@ -26,6 +26,6 @@ else
     cd $ANSIBLE_DIR
 fi
 
-ansible-playbook -i inventory.ini -e component=$component  environment=$environment main.yaml
+ansible-playbook -i inventory.ini -e component=$component  -e environment=$environment main.yaml
     
     

@@ -51,3 +51,13 @@ resource "aws_security_group_rule" "bastion-rabbitmq" {
     to_port = 22
     protocol = "tcp"
 }
+
+#ingress traffic from  bastion to mysql
+resource "aws_security_group_rule" "bastion-mysql" {
+    type = "ingress"
+    security_group_id = local.mysql_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
