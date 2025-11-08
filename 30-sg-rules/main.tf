@@ -10,11 +10,23 @@ resource "aws_security_group_rule" "backend_alb_bastion" {
   
 }
 
-#ingress traffic from my laptop to bastion
-resource "aws_security_group_rule" "bastion_laptop" {
+
+#ingress traffic from  laptop to bastion to
+resource "aws_security_group_rule" "mongodb-bastion" {
     type = "ingress"
     security_group_id = local.bastion_sg_id
     cidr_blocks = ["0.0.0.0/0"]
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+  
+}
+
+#ingress traffic from  bastion to mongodb
+resource "aws_security_group_rule" "mongodb-bastion" {
+    type = "ingress"
+    security_group_id = local.mongodb_sg_id
+    source_security_group_id = local.bastion_sg_id
     from_port = 22
     to_port = 22
     protocol = "tcp"
