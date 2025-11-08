@@ -32,12 +32,12 @@ provisioner "file" {
 provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/bootstrap.sh",
-        "sudo sh /tmp/bootstrap.sh"
+        "sudo sh /tmp/bootstrap.sh mongodb"
      ]
    } 
 }
 
-
+#redis configuration
 resource "aws_instance" "redis" {
     ami = local.ami_id
     instance_type = "t3.micro"
@@ -72,7 +72,7 @@ provisioner "file" {
 provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/bootstrap.sh",
-        "sudo sh /tmp/bootstrap.sh"
+        "sudo sh /tmp/bootstrap.sh redis"
      ]
    } 
 }
