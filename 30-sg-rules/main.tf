@@ -19,16 +19,35 @@ resource "aws_security_group_rule" "mongodb-bastion" {
     from_port = 22
     to_port = 22
     protocol = "tcp"
-  
 }
 
 #ingress traffic from  bastion to mongodb
-resource "aws_security_group_rule" "mongodb-bastion" {
+resource "aws_security_group_rule" "bastion-mongodb" {
     type = "ingress"
     security_group_id = local.mongodb_sg_id
     source_security_group_id = local.bastion_sg_id
     from_port = 22
     to_port = 22
     protocol = "tcp"
-  
+}
+
+#ingress traffic from  bastion to redis
+resource "aws_security_group_rule" "bastion-redis" {
+    type = "ingress"
+    security_group_id = local.redis_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+
+
+#ingress traffic from  bastion to rabbitmq
+resource "aws_security_group_rule" "bastion-rabbitmq" {
+    type = "ingress"
+    security_group_id = local.rabbitmq_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
 }
