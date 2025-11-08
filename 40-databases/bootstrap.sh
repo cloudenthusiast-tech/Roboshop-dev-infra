@@ -22,7 +22,7 @@ if [ -d $ANSIBLE_DIR ]; then
     git pull
 else
     git clone $REPO_URL
-    cd $REPO_DIR
+    cd $ANSIBLE_DIR
 fi
 
 ansible-playbook -e component=$component main.yaml
