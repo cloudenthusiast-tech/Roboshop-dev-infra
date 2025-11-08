@@ -12,7 +12,7 @@ resource "aws_instance" "mongodb" {
 }
 
 resource "terraform_data" "mongodb" {
-    triggers_replace = [
+    triggers_replace = [    # triggered when instanced id changed
         aws_instance.mongodb.id
     ]
 
@@ -22,10 +22,17 @@ connection {
   password = "DevOps321"
   host= aws_instance.mongodb.private_ip
 }
+#terraform copies this file to mongodb server
+provisioner "file" {
+    source = "bootstrap.sh"
+    destination = "/tmp/bootstrap.sh"
+  
+}
 
 provisioner "remote-exec" {
     inline = [ 
-        "echo from silo"
+        "chmod +x /tmp/bootstrao.sh"
+        "sudo sh /tmp/bootstrap.sh"
      ]
    } 
 }
