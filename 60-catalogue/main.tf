@@ -35,7 +35,7 @@ provisioner "file" {
 provisioner "remote-exec" {
     inline = [ 
         "chmod +x /tmp/catalogue.sh",
-        "sudo sh /tmp/bootstrap.sh catalogue ${var.environment}"
+        "sudo sh /tmp/catalogue.sh catalogue ${var.environment}"
      ]
    } 
 }
