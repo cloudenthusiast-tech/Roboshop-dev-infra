@@ -61,3 +61,23 @@ resource "aws_security_group_rule" "bastion-mysql" {
     to_port = 22
     protocol = "tcp"
 }
+
+#ingress traffic from  bastion to catalogue
+resource "aws_security_group_rule" "bastion-catalogue" {
+    type = "ingress"
+    security_group_id = local.catalogue_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+
+#mongodb accepting traffic from catalogue
+resource "aws_security_group_rule" "mongodb-catalogue" {
+    type = "ingress"
+    security_group_id = local.mongodb_sg_id
+    source_security_group_id = local.catalogue_sg_id
+    from_port = 27017
+    to_port = 27017
+    protocol = "tcp"
+}
