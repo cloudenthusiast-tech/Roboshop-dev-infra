@@ -1,28 +1,5 @@
-
-# backend_alb accepting traffic from bastion instance
-resource "aws_security_group_rule" "backend_alb_bastion" {
-    type = "ingress"
-    security_group_id = local.backend_alb_sg_id
-    source_security_group_id = local.bastion_sg_id
-    from_port = 80
-    to_port = 80
-    protocol = "tcp"
-  
-}
-
-
-#ingress traffic from  laptop to bastion to
-resource "aws_security_group_rule" "mongodb-bastion" {
-    type = "ingress"
-    security_group_id = local.bastion_sg_id
-    cidr_blocks = ["0.0.0.0/0"]
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-}
-
-#ingress traffic from  bastion to mongodb
-resource "aws_security_group_rule" "bastion-mongodb" {
+###### mongodb #######
+resource "aws_security_group_rule" "mongodb_bastion" {
     type = "ingress"
     security_group_id = local.mongodb_sg_id
     source_security_group_id = local.bastion_sg_id
@@ -30,49 +7,6 @@ resource "aws_security_group_rule" "bastion-mongodb" {
     to_port = 22
     protocol = "tcp"
 }
-
-#ingress traffic from  bastion to redis
-resource "aws_security_group_rule" "bastion-redis" {
-    type = "ingress"
-    security_group_id = local.redis_sg_id
-    source_security_group_id = local.bastion_sg_id
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-}
-
-
-#ingress traffic from  bastion to rabbitmq
-resource "aws_security_group_rule" "bastion-rabbitmq" {
-    type = "ingress"
-    security_group_id = local.rabbitmq_sg_id
-    source_security_group_id = local.bastion_sg_id
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-}
-
-#ingress traffic from  bastion to mysql
-resource "aws_security_group_rule" "bastion-mysql" {
-    type = "ingress"
-    security_group_id = local.mysql_sg_id
-    source_security_group_id = local.bastion_sg_id
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-}
-
-#ingress traffic from  bastion to catalogue
-resource "aws_security_group_rule" "bastion-catalogue" {
-    type = "ingress"
-    security_group_id = local.catalogue_sg_id
-    source_security_group_id = local.bastion_sg_id
-    from_port = 22
-    to_port = 22
-    protocol = "tcp"
-}
-
-#mongodb accepting traffic from catalogue
 resource "aws_security_group_rule" "mongodb-catalogue" {
     type = "ingress"
     security_group_id = local.mongodb_sg_id
@@ -81,8 +15,95 @@ resource "aws_security_group_rule" "mongodb-catalogue" {
     to_port = 27017
     protocol = "tcp"
 }
+resource "aws_security_group_rule" "mongodb_user" {
+    type = "ingress"
+    security_group_id = local.mongodb_sg_id
+    source_security_group_id = local.user_sg_id
+    from_port = 27017
+    to_port = 27017
+    protocol = "tcp"
+}
 
-resource "aws_security_group_rule" "backend_alb-catalogue" {
+
+
+###### redis #####
+resource "aws_security_group_rule" "redis_bastion" {
+    type = "ingress"
+    security_group_id = local.redis_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "redis_user" {
+    type = "ingress"
+    security_group_id = local.redis_sg_id
+    source_security_group_id = local.user_sg_id
+    from_port = 6379
+    to_port = 6379
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "redis_cart" {
+    type = "ingress"
+    security_group_id = local.redis_sg_id
+    source_security_group_id = local.cart_sg_id
+    from_port = 6379
+    to_port = 6379
+    protocol = "tcp"
+}
+
+
+
+##### mysql ######
+resource "aws_security_group_rule" "mysql_bastion" {
+    type = "ingress"
+    security_group_id = local.mysql_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "mysql_shipping" {
+    type = "ingress"
+    security_group_id = local.mysql_sg_id
+    source_security_group_id = local.shipping_sg_id
+    from_port = 3306
+    to_port = 3306
+    protocol = "tcp"
+}
+
+
+
+###### rabbitmq  #######
+resource "aws_security_group_rule" "rabbitmq_bastion" {
+    type = "ingress"
+    security_group_id = local.rabbitmq_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "rabbitmq_payment" {
+    type = "ingress"
+    security_group_id = local.rabbitmq_sg_id
+    source_security_group_id = local.payment_sg_id
+    from_port = 5672
+    to_port = 5672
+    protocol = "tcp"
+}
+
+
+
+###### catalogue #######
+resource "aws_security_group_rule" "catalogue_bastion" {
+    type = "ingress"
+    security_group_id = local.catalogue_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "catalogue_backend_alb" {
     type = "ingress"
     security_group_id = local.catalogue_sg_id
     source_security_group_id = local.backend_alb_sg_id
@@ -91,6 +112,106 @@ resource "aws_security_group_rule" "backend_alb-catalogue" {
     protocol = "tcp"
 }
 
+
+##### user #######
+resource "aws_security_group_rule" "user_bastion" {
+    type = "ingress"
+    security_group_id = local.user_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "user_backend_alb" {
+    type = "ingress"
+    security_group_id = local.user_sg_id
+    source_security_group_id = local.backend_alb_sg_id
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+}
+
+
+
+####### cart ######
+resource "aws_security_group_rule" "cart_bastion" {
+    type = "ingress"
+    security_group_id = local.cart_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "cart_backend_alb" {
+    type = "ingress"
+    security_group_id = local.cart_sg_id
+    source_security_group_id = local.backend_alb_sg_id
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+}
+
+
+
+#### shipping #####
+resource "aws_security_group_rule" "shipping_bastion" {
+    type = "ingress"
+    security_group_id = local.shipping_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "shipping_backend_alb" {
+    type = "ingress"
+    security_group_id = local.shipping_sg_id
+    source_security_group_id = local.backend_alb_sg_id
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+}
+
+
+
+###### payment #######
+resource "aws_security_group_rule" "payment_bastion" {
+    type = "ingress"
+    security_group_id = local.payment_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "payment_backend_alb" {
+    type = "ingress"
+    security_group_id = local.payment_sg_id
+    source_security_group_id = local.backend_alb_sg_id
+    from_port = 8080
+    to_port = 8080
+    protocol = "tcp"
+}
+
+
+##### frontend SG rules ######
+resource "aws_security_group_rule" "frontend_bastion" {
+    type = "ingress"
+    security_group_id = local.frontend_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "frontend_alb_frontend" {
+    type = "ingress"
+    security_group_id = local.frontend_sg_id
+    source_security_group_id = local.frontend_alb_sg_id
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+}
+
+
+##### frontend ALB SG rules #####
 resource "aws_security_group_rule" "frontend_alb_public" {
     type = "ingress"
     security_group_id = local.frontend_alb_sg_id
@@ -99,3 +220,101 @@ resource "aws_security_group_rule" "frontend_alb_public" {
     to_port = 443
     protocol = "tcp"
 }
+
+##### bastion SG rule #####
+resource "aws_security_group_rule" "bastion_laptop" {
+    type = "ingress"
+    security_group_id = local.bastion_sg_id
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port = 22
+    to_port = 22
+    protocol = "tcp"
+}
+
+
+##### backend_alb SG_rules  #####
+resource "aws_security_group_rule" "backend_alb_bastion" {
+    type = "ingress"
+    security_group_id = local.backend_alb_sg_id
+    source_security_group_id = local.bastion_sg_id
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "backend_alb_frontend" {
+    type = "ingress"
+    security_group_id = local.backend_alb_sg_id
+    source_security_group_id = local.frontend_sg_id
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "backend_alb_cart" {
+    type = "ingress"
+    security_group_id = local.backend_alb_sg_id
+    source_security_group_id = local.cart_sg_id
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "backend_alb_shipping" {
+    type = "ingress"
+    security_group_id = local.backend_alb_sg_id
+    source_security_group_id = local.shipping_sg_id
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+}
+resource "aws_security_group_rule" "backend_alb_payment" {
+    type = "ingress"
+    security_group_id = local.backend_alb_sg_id
+    source_security_group_id = local.payment_sg_id
+    from_port = 80
+    to_port = 80
+    protocol = "tcp"
+}
+
+
+# one component won't able to access another component directly, but omly through backend LB
+
+# resource "aws_security_group_rule" "catalogue_cart" {
+#     type = "ingress"
+#     security_group_id = local.catalogue_sg_id
+#     source_security_group_id = local.cart_sg_id
+#     from_port = 8080
+#     to_port = 8080
+#     protocol = "tcp"
+# }
+
+# resource "aws_security_group_rule" "cart_shipping" {
+#     type = "ingress"
+#     security_group_id = local.cart_sg_id
+#     source_security_group_id = local.shipping_sg_id
+#     from_port = 8080
+#     to_port = 8080
+#     protocol = "tcp"
+# }
+
+# resource "aws_security_group_rule" "cart_payment" {
+#     type = "ingress"
+#     security_group_id = local.cart_sg_id
+#     source_security_group_id = local.payment_sg_id
+#     from_port = 8080
+#     to_port = 8080
+#     protocol = "tcp"
+# }
+
+# resource "aws_security_group_rule" "user_payment" {
+#     type = "ingress"
+#     security_group_id = local.user_sg_id
+#     source_security_group_id = local.payment_sg_id
+#     from_port = 8080
+#     to_port = 8080
+#     protocol = "tcp"
+# }
+
+
+
+
+
+
