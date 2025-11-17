@@ -15,5 +15,6 @@ cd /home/ec2-user
 git clone https://github.com/cloudenthusiast-tech/Roboshop-dev-infra.git
 cd Roboshop-dev-infra/40-databases
 chown ec2-user:ec2-user -R Roboshop-dev-infra
+terraform validate
 terraform init
 terraform apply -auto-approve
